@@ -22,6 +22,8 @@ exports.register = async (req, res) => {
   }
 };
 
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3ZTgwNWFiZThlYTRhNzc4Y2E0Yjk3NyIsImlhdCI6MTc0MzI1OTA2MSwiZXhwIjoxNzQzMjYyNjYxfQ.LQzoSG8lhYeS_py-B7jmw76TBnUCMDIj7h0a8cSw744
+
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -49,7 +51,6 @@ exports.login = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
   try {
-    // ✅ Ensure req.user exists (Middleware should set this)
     if (!req.user || !req.user.id) {
       return res.status(401).json({
         success: false,
@@ -58,17 +59,16 @@ exports.updateProfile = async (req, res) => {
     }
 
     const { name, email, password } = req.body;
-    const { id } = req.user; // Extract user ID from token
+    const { id } = req.user;
 
-    // ✅ Fetch the user from DB
     const user = await User.findById(id);
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
     }
 
-    // ✅ Check if email already exists (Prevent duplicate emails)
     if (email && email !== user.email) {
       const emailExists = await User.findOne({ email });
       if (emailExists) {
@@ -80,29 +80,29 @@ exports.updateProfile = async (req, res) => {
       user.email = email;
     }
 
-    // ✅ Update fields only if provided
     if (name) user.name = name;
     if (password) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
     }
 
-    // ✅ Save and return updated user (excluding password)
-    const updatedUser = await user.save();
+    await user.save();
 
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",
       user: {
-        id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
+        id: user._id,
+        name: user.name,
+        email: user.email,
       },
     });
   } catch (error) {
     console.error("Server Error: ", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Server error", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+      error: error.message,
+    });
   }
 };
