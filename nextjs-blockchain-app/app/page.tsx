@@ -1,103 +1,157 @@
-import Image from "next/image";
+'use client'
 
-export default function Home() {
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+// import Login from "./login/page"; // Ensure correct case
+// import Register from "./register";
+import { CursorArrowRippleIcon } from "@heroicons/react/24/outline";
+
+export default function Page() {
+  const [activePage, setActivePage] = useState("home");
+  const [cursorStyle, setCursorStyle] = useState({ top: 0, left: 0 });
+
+useEffect(() => {
+  const moveCursor = (e: MouseEvent) => {
+    requestAnimationFrame(() => {
+      setCursorStyle({ top: e.clientY, left: e.clientX });
+    });
+  };
+  window.addEventListener("mousemove", moveCursor);
+  return () => window.removeEventListener("mousemove", moveCursor);
+}, []);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="relative flex flex-col items-center justify-center min-h-screen bg-[#0d1117] text-white overflow-hidden">
+      {/* 3D Animated Cursor */}
+      <motion.div
+        className="fixed w-6 h-6 rounded-full bg-purple-500 opacity-50 blur-md"
+        style={{ top: cursorStyle.top, left: cursorStyle.left, transform: "translate(-50%, -50%)" }}
+        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.8, 0.5] }}
+        transition={{ duration: 0.4, repeat: Infinity }}
+      />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Blob Background Animation */}
+      <div className="absolute w-full h-full">
+        <motion.div
+          className="absolute top-1/3 left-1/4 w-96 h-96 bg-purple-500 rounded-full blur-[120px] opacity-50"
+          animate={{ scale: [1, 1.5, 1], rotate: [0, 360, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[120px] opacity-50"
+          animate={{ scale: [1, 1.5, 1], rotate: [360, 0, 360] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        />
+      </div>
+
+      {/* Navigation Bar */}
+      <motion.nav
+        className="absolute top-6 w-full flex justify-between items-center px-10"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="text-xl font-bold">Web3 UI</div>
+        <div className="flex space-x-6">
+          {["home", "about", "products"].map((page) => (
+            <motion.a
+              key={page}
+              onClick={() => {
+                setActivePage(page);
+                console.log("Active Page:", page); // Debugging
+              }}
+              className={`cursor-pointer text-lg ${
+                activePage === page ? "text-purple-400" : "text-white"
+              } hover:text-purple-400 transition duration-300`}
+              whileHover={{ scale: 1.1, rotateY: 10 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              {page.charAt(0).toUpperCase() + page.slice(1)}
+            </motion.a>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="flex space-x-4">
+          <motion.button
+            onClick={() => {
+              setActivePage("login");
+              console.log("Navigating to Login"); // Debugging
+            }}
+            className="border border-white px-4 py-2 rounded-lg text-white bg-transparent hover:bg-purple-500 transition duration-300"
+            whileHover={{ scale: 1.1, boxShadow: "0px 0px 10px rgba(128,0,128,0.8)" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Login
+          </motion.button>
+          <motion.button
+            onClick={() => {
+              setActivePage("register");
+              console.log("Navigating to Register"); // Debugging
+            }}
+            className="border border-white px-4 py-2 rounded-lg text-white bg-transparent hover:bg-blue-500 transition duration-300"
+            whileHover={{ scale: 1.1, boxShadow: "0px 0px 10px rgba(0,0,255,0.8)" }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Register
+          </motion.button>
+        </div>
+      </motion.nav>
+
+      {/* Dynamic Page Rendering */}
+      <motion.div
+        className="relative w-full flex items-center justify-center min-h-screen"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        {activePage === "home" && (
+          <motion.div
+            className="text-center text-4xl font-extrabold"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            Welcome to Web3 UI 🚀
+          </motion.div>
+        )}
+        {activePage === "about" && (
+          <motion.div
+            className="text-center text-3xl font-bold"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            About Us - Web3 Revolution 🌍
+          </motion.div>
+        )}
+        {activePage === "products" && (
+          <motion.div
+            className="text-center text-3xl font-bold"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            Our Web3 Products 🚀🔥
+          </motion.div>
+        )}
+        {activePage === "login" && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            {/* <Login /> */}
+          </motion.div>
+        )}
+        {activePage === "register" && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            {/* <Register /> */}
+          </motion.div>
+        )}
+      </motion.div>
     </div>
   );
 }
