@@ -37,6 +37,8 @@ exports.login = async (req, res) => {
       expiresIn: "1h",
     });
 
+    global.USER_DATA.push({id: user._id, mac: req.header("deviceMac")});
+
     res.status(200).json({
       success: true,
       message: "Token generated successfully",

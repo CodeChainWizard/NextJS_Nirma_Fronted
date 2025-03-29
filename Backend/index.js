@@ -3,6 +3,8 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/user.js");
 require("dotenv").config();
 
+global.USER_DATA = { name :  "raju", mac: "123"};
+
 const app = express();
 
 connectDB();
