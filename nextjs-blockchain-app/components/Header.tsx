@@ -4,20 +4,19 @@ import {
   BellIcon,
   MagnifyingGlassIcon,
   UserCircleIcon,
+  ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 
 import Image from "next/image";
 
-// ✅ Import Radix UI Dropdown
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Button } from "@heroui/react";
 
 export default function Headers() {
   return (
-    <div className="bg-transparent shadow-md w-full z-50 top-0 left-0 mt-2">
+    <div className="header-layout bg-transparent shadow-md w-full z-50 top-0 left-0 mt-2">
       <div className="max-w-7xl bg-white/10 backdrop-blur-md rounded-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          {/* Left: Logo and Navigation */}
           <div className="flex items-center">
             <Image src="/Logo.png" alt="Logo" width={60} height={40} />{" "}
             <h1 className="text-2xl font-bold text-red-700 ps-2">ShipyChain</h1>
@@ -43,19 +42,17 @@ export default function Headers() {
             </nav>
           </div>
 
-          {/* Right: Search and User Icons */}
           <div className="flex items-center space-x-4">
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search..."
-                className="pl-10 pr-4 py-2 border rounded-full focus:ring-2 focus:ring-red-700 focus:outline-none"
+                className="pl-10 pr-4 py-2 border rounded-b-xl focus:ring-2 focus:ring-red-700 focus:outline-none"
               />
               <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-white" />
             </div>
             <BellIcon className="h-6 w-6 text-gray-200 cursor-pointer hover:text-red-700" />
 
-            {/* ✅ Radix UI Dropdown */}
             <DropdownMenu.Root>
               <DropdownMenu.Trigger asChild>
                 <Button variant="bordered">
@@ -67,10 +64,12 @@ export default function Headers() {
                   className="bg-white text-black rounded-lg shadow-md p-2"
                   sideOffset={5}
                 >
-                  <DropdownMenu.Item className="px-3 py-2 cursor-pointer hover:bg-gray-100">
+                  <DropdownMenu.Item className="px-3 py-2 flex justify-center align-middle text-center gap-2 cursor-pointer  hover:bg-gray-100  ">
+                    <UserCircleIcon className="h-6 w-6 text-black cursor-pointer " />
                     Profile
                   </DropdownMenu.Item>
-                  <DropdownMenu.Item className="px-3 py-2 cursor-pointer hover:bg-gray-100">
+                  <DropdownMenu.Item className="px-3 py-2 flex cursor-pointer hover:bg-gray-100">
+                    <ArrowRightStartOnRectangleIcon className="w-7 h-5 gap-4" />
                     Log out
                   </DropdownMenu.Item>
                 </DropdownMenu.Content>

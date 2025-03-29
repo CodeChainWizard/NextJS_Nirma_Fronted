@@ -1,0 +1,33 @@
+/* Custom Cursor */
+.custom-cursor {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.5); /* Transparent white */
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 0.01s ease, box-shadow 0.01s ease;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.3); /* Soft glow */
+  filter: blur(8px); /* Fading blur effect */
+  mix-blend-mode: difference;
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.01s ease, transform 0.01s ease;
+}
+
+/* Glow effect only inside target layouts */
+.custom-cursor.hover {
+  opacity: 0.9; /* Show with glow effect */
+  transform: scale(2);
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.7); /* Glowing effect */
+  filter: blur(15px);
+  transition: all 0.01s ease;
+}
+
+
+.custom-cursor.hidden {
+  opacity: 0; 
+  transform: scale(0.5);
+  transition: opacity 0.1s ease, transform 0.1s ease;
+}
