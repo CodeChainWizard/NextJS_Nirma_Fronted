@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  console.log("🚀 Starting deployment...");
+  console.log("Starting deployment...");
 
   // Deploy MockBridge
   console.log("Deploying MockBridge...");
